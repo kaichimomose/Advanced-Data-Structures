@@ -97,3 +97,33 @@ class PriorityQueueTest(unittest.TestCase):
         assert p.heap.items == []
         with self.assertRaises(ValueError):
             p.dequeue()
+
+    def test_push_pop(self):
+        p = PriorityQueue()
+        assert p.heap.items == []
+        p.enqueue('A', 2)
+        assert p.heap.items == [(2, 'A')]
+        p.enqueue('B', 2)
+        assert p.heap.items == [(2, 'A'), (2, 'B')]
+        p.enqueue('C', 1)
+        assert p.heap.items == [(1, 'C'), (2, 'B'), (2, 'A')]
+        p.enqueue('D', 1)
+        assert p.heap.items == [(1, 'C'), (1, 'D'), (2, 'A'), (2, 'B')]
+        p.enqueue('E', 3)
+        assert p.heap.items == [(1, 'C'), (1, 'D'), (2, 'A'), (2, 'B'), (3, 'E')]
+        p.enqueue('F', 2)
+        assert p.heap.items == [(1, 'C'), (1, 'D'), (2, 'A'), (2, 'B'), (3, 'E'), (2, 'F')]
+        assert p.push_pop('G', 1) == 'C'
+        assert p.heap.items == [(1, 'D'), (1, 'G'), (2, 'A'), (2, 'B'), (3, 'E'), (2, 'F')]
+        assert p.push_pop('H', 2) == 'D'
+        assert p.heap.items == [(1, 'G'), (2, 'B'), (2, 'A'), (2, 'H'), (3, 'E'), (2, 'F')]
+        assert p.push_pop('I', 3) == 'G'
+        assert p.heap.items == [(2, 'A'), (2, 'B'), (2, 'F'), (2, 'H'), (3, 'E'), (3, 'I')]
+        assert p.push_pop('J', 4) == 'A'
+        assert p.heap.items == [(2, 'B'), (2, 'H'), (2, 'F'), (4, 'J'), (3, 'E'), (3, 'I')]
+        assert p.push_pop('K', 1) == 'B'
+        assert p.heap.items == [(1, 'K'), (2, 'H'), (2, 'F'), (4, 'J'), (3, 'E'), (3, 'I')]
+        assert p.push_pop('L', 3) == 'K'
+        assert p.heap.items == [(2, 'F'), (2, 'H'), (3, 'I'), (4, 'J'), (3, 'E'), (3, 'L')]
+        # with self.assertRaises(ValueError):
+        #     p.dequeue()
