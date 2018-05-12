@@ -84,6 +84,7 @@ def main():
     all_prefixes = set([word[:len(word)//2] for word in all_words])
     time = benchmark(all_prefixes)
     print('Took {} seconds to benchmark {} prefixes on {} words'.format(time, len(all_prefixes), len(all_words)))
+    # Took 3055.2585480213165 seconds to benchmark 71244 prefixes on 235886 words
     # import sys
     # prefix = sys.argv[1]
     # words = autocomplete(prefix)
