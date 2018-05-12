@@ -1,0 +1,4 @@
+I liked robots and I still like robots.
+I was fascinated by watching ASIMO, an actual humanoid robot that can walk smoothly, on TV.
+Thus, I belonged to control-engineering lab to learn about robots control technology at Kyushu University.
+I wanted to create automatic robots with artificial intelligence that support our work because many Japanese manufacturing companies has faced shortage of engineers. 
