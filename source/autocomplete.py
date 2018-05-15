@@ -2,7 +2,7 @@
 
 import random
 import time
-
+from tries import Trie
 
 
 def get_words(filename):
@@ -12,7 +12,7 @@ def get_words(filename):
     return words_list
 
 
-def binaryserch(list_, item, left=None, right=None):
+def binarysearch(list_, item, left=None, right=None):
     if left is None and right is None:
         left = 0
         right = len(list_) - 1
@@ -22,9 +22,9 @@ def binaryserch(list_, item, left=None, right=None):
     if middle_item[:item_length].lower() == item.lower():
         return find_all_words(list_, item, middle)
     elif middle_item[:item_length].lower() < item.lower():
-        return binaryserch(list_, item, middle + 1, right)
+        return binarysearch(list_, item, middle + 1, right)
     elif middle_item[:item_length].lower() > item.lower():
-        return binaryserch(list_, item, left, middle - 1)
+        return binarysearch(list_, item, left, middle - 1)
     elif left > right:
         return None
 
@@ -33,7 +33,7 @@ def find_all_words(list_, item, middle):
     predicted_words = [list_[middle]]
     item_length = len(item)
     left_match = True
-    right_match = False
+    right_match = True
     left_index = middle
     right_index = middle
     while left_match:
@@ -42,7 +42,7 @@ def find_all_words(list_, item, middle):
             left_match = False
         else:
             word = list_[left_index]
-            if word[:item_length] == item:
+            if word[:item_length].lower() == item.lower():
                 predicted_words.append(word)
             else:
                 left_match = False
@@ -52,29 +52,67 @@ def find_all_words(list_, item, middle):
             right_match = False
         else:
             word = list_[right_index]
-            if word[:item_length] == item:
+            if word[:item_length].lower() == item.lower():
                 predicted_words.append(word)
             else:
                 right_match = False
     return predicted_words
 
-def autocomplete(prefix=""):
-    filename = "/usr/share/dict/words"
-    words_list = get_words(filename)
+
+def insert_word(words_list):
+    trie = Trie()
+    for word in words_list:
+        trie.insert(word)
+    return trie
+
+
+def find_prefix(trie, prefix):
+    node = trie.root
+    print(prefix)
+    for letter in prefix:
+        print(node.next)
+        node = node.next[letter]
+    return node.next
+
+
+def find_words(nodes, words=[]):
+    for letter in nodes:
+        if nodes[letter].data[1]:
+            words.append(nodes[letter].data[0])
+        # else:
+        #     nodes = nodes[letter].next
+        #     if nodes != {}:
+        #         words = find_words(nodes, words)
+        #     else:
+    return words
+
+def find_all_words_with_trie(trie, prefix):
+    nodes = find_prefix(trie, prefix)
+    all_words = find_words(nodes)
+    return all_words
+
+def autocomplete(words_list, prefix=""):
     # prefix_length = len(prefix)
     # predicted_words = []
     # for word in words_list:
     #     # if word.startswith(prefix):
     #     if word[:prefix_length] == prefix:
     #         predicted_words.append(word)
-    predicted_words = binaryserch(words_list, prefix)
+    # predicted_words = binarysearch(words_list, prefix)
+    predicted_words = find_all_words_with_trie(words_list, prefix)
     return predicted_words
 
 
 def benchmark(all_prefixes):
     t1 = time.time()
+    filename = "/usr/share/dict/words"
+    words_list = get_words(filename)
+    trie = insert_word(words_list)
     for prefix in all_prefixes:
-        autocomplete(prefix)
+        # print(prefix)
+        # print(autocomplete(words_list, prefix))
+        # autocomplete(words_list, prefix)
+        autocomplete(trie, prefix)
     t2 = time.time()
     return t2 - t1
 
@@ -84,10 +122,12 @@ def main():
     all_prefixes = set([word[:len(word)//2] for word in all_words])
     time = benchmark(all_prefixes)
     print('Took {} seconds to benchmark {} prefixes on {} words'.format(time, len(all_prefixes), len(all_words)))
-    # Took 3055.2585480213165 seconds to benchmark 71244 prefixes on 235886 words
+    # Took 3.200831890106201 seconds to benchmark 71244 prefixes on 235886 words
     # import sys
+    # filename = "/usr/share/dict/words"
+    # words_list = get_words(filename)
     # prefix = sys.argv[1]
-    # words = autocomplete(prefix)
+    # words = autocomplete(words_list, prefix)
     # print(words)
 
 if __name__ == '__main__':
