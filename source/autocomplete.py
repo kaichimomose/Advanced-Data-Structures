@@ -68,23 +68,28 @@ def insert_word(words_list):
 
 def find_prefix(trie, prefix):
     node = trie.root
-    print(prefix)
+    # print(prefix)
     for letter in prefix:
-        print(node.next)
+        # print(node.next)
         node = node.next[letter]
     return node.next
 
 
 def find_words(nodes, words=[]):
-    for letter in nodes:
-        if nodes[letter].data[1]:
-            words.append(nodes[letter].data[0])
-        # else:
-        #     nodes = nodes[letter].next
-        #     if nodes != {}:
-        #         words = find_words(nodes, words)
-        #     else:
-    return words
+    # print(nodes)
+    if nodes != {}:
+        for letter in nodes:
+            # print(letter)
+            if nodes[letter].data[1]:
+                # print(nodes[letter].data)
+                words.append(nodes[letter].data[0])
+                # words = find_words(nodes, words)
+            # else:
+            #     words = find_words(nodes[letter].next, words)
+            words = find_words(nodes[letter].next, words)
+        return words
+    else:
+        return words
 
 def find_all_words_with_trie(trie, prefix):
     nodes = find_prefix(trie, prefix)
@@ -107,14 +112,18 @@ def benchmark(all_prefixes):
     t1 = time.time()
     filename = "/usr/share/dict/words"
     words_list = get_words(filename)
+    t2 = time.time()
+    print('Took {} seconds to create list'.format(t2-t1))
     trie = insert_word(words_list)
+    t3 = time.time()
+    print('Took {} seconds to create trie'.format(t3-t2))
     for prefix in all_prefixes:
         # print(prefix)
         # print(autocomplete(words_list, prefix))
         # autocomplete(words_list, prefix)
         autocomplete(trie, prefix)
-    t2 = time.time()
-    return t2 - t1
+    t4 = time.time()
+    return t4 - t3
 
 
 def main():

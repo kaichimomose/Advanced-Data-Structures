@@ -17,10 +17,10 @@ class Trie(object):
     def insert(self, word):
         node = self.root
         letters = node.data[0]
+        # for char in word:
         for i in range(len(word)):
             letter = word[i]
             if letter in node.next:
-                node = node.next[letter]
                 letters += letter
             else:
                 letters += letter
@@ -28,3 +28,14 @@ class Trie(object):
                 if i == len(word) - 1:
                     is_word = True
                 node.next[letter] = Trie_node(letters, is_word)
+            node = node.next[letter]
+
+
+if __name__ == '__main__':
+    trie = Trie()
+    trie.insert('benzbitriazole')
+    node = trie.root
+    while node.next != {}:
+        print(node.next)
+        for letter in node.next:
+            node = node.next[letter]
