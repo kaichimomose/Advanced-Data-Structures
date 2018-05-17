@@ -99,6 +99,6 @@ class TrieTest(unittest.TestCase):
         assert len(node.next) == 0
 
 
-# class AutocompleteTest(unittest.TestCase):
-#
-#     def test_insert_word():
+class AutocompleteTest(unittest.TestCase):
+
+    def test_insert_word():

@@ -68,24 +68,17 @@ def insert_word(words_list):
 
 def find_prefix(trie, prefix):
     node = trie.root
-    # print(prefix)
     for letter in prefix:
-        # print(node.next)
         node = node.next[letter]
     return node.next
 
 
 def find_words(nodes, words=[]):
-    # print(nodes)
     if nodes != {}:
         for letter in nodes:
-            # print(letter)
             if nodes[letter].data[1]:
-                # print(nodes[letter].data)
                 words.append(nodes[letter].data[0])
-                # words = find_words(nodes, words)
-            # else:
-            #     words = find_words(nodes[letter].next, words)
+
             words = find_words(nodes[letter].next, words)
         return words
     else:
@@ -118,7 +111,6 @@ def benchmark(all_prefixes):
     t3 = time.time()
     print('Took {} seconds to create trie'.format(t3-t2))
     for prefix in all_prefixes:
-        # print(prefix)
         # print(autocomplete(words_list, prefix))
         # autocomplete(words_list, prefix)
         autocomplete(trie, prefix)
