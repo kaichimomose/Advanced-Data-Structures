@@ -7,12 +7,12 @@ def fibonacci(n):
     fibonacci(1) = 1
     fibonacci(n) = fibonacci(n - 1) + fibonacci(n - 2), for n > 1"""
     # Check if n is negative or not an integer (invalid input)
-    if n < 0 or not isinstance(n, int):
+    if not isinstance(n, int) or n < 0:
         raise ValueError('fibonacci is undefined for n = {!r}'.format(n))
     # Implement fibonacci_recursive, _memoized, and _dynamic below, then
     # change this to call your implementation to verify it passes all tests
-    return fibonacci_recursive(n)
-    # return fibonacci_memoized(n)
+    # return fibonacci_recursive(n)
+    return fibonacci_memoized(n)
     # return fibonacci_dynamic(n)
 
 
@@ -23,15 +23,25 @@ def fibonacci_recursive(n):
     # Check if n is larger than the base cases
     elif n > 1:
         # Call function recursively and add the results together
-        return fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2)
+        return fibonacci_recursive(n-1) + fibonacci_recursive(n-2)
 
 
-def fibonacci_memoized(n):
-    # TODO: Memoize the fibonacci function's recursive implementation here
-    pass
+def fibonacci_memoized(n, memo={}):
+    # Memoize the fibonacci function's recursive implementation here
+    if n in memo:
+        return memo[n]
     # Once implemented, change fibonacci (above) to call fibonacci_memoized
     # to verify that your memoized implementation passes all test cases
-
+    else:
+        # Check if n is one of the base cases
+        if n == 0 or n == 1:
+            memo[n] = n
+            return fibonacci_memoized(n, memo)
+        # Check if n is larger than the base cases
+        elif n > 1:
+            # Call function recursively and add the results together
+            memo[n] = fibonacci_memoized(n-1, memo) + fibonacci_memoized(n-2, memo)
+            return memo[n]
 
 def fibonacci_dynamic(n):
     # TODO: Implement the fibonacci function with dynamic programming here
