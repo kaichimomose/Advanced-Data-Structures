@@ -1,5 +1,7 @@
 #!python
 
+import time
+
 def fibonacci(n):
     """fibonacci(n) returns the n-th number in the Fibonacci sequence,
     which is defined with the recurrence relation:
@@ -28,24 +30,17 @@ def fibonacci_recursive(n):
 
 def fibonacci_memoized(n, memo={}):
     # Memoize the fibonacci function's recursive implementation here
-    if n in memo:
-        print("Read dic: ", n, memo)
-        return memo[n]
     # Once implemented, change fibonacci (above) to call fibonacci_memoized
     # to verify that your memoized implementation passes all test cases
-    else:
+    if n not in memo:
         # Check if n is one of the base cases
         if n == 0 or n == 1:
-            print(n, memo)
             memo[n] = n
-            # return fibonacci_memoized(n, memo)
-            return memo[n]
         # Check if n is larger than the base cases
         elif n > 1:
             # Call function recursively and add the results together
-            print(n, memo)
             memo[n] = fibonacci_memoized(n-1, memo) + fibonacci_memoized(n-2, memo)
-            return memo[n]
+    return memo[n]
 
 def fibonacci_dynamic(n):
     # TODO: Implement the fibonacci function with dynamic programming here
@@ -53,14 +48,22 @@ def fibonacci_dynamic(n):
     # Once implemented, change fibonacci (above) to call fibonacci_dynamic
     # to verify that your dynamic implementation passes all test cases
 
+def benchmark(num):
+    t1 = time.time()
+    result = fibonacci(num)
+    t2 = time.time()
+    return result, t2-t1
 
 def main():
     import sys
     args = sys.argv[1:]  # Ignore script file name
     if len(args) == 1:
         num = int(args[0])
-        result = fibonacci(num)
+        result, time = benchmark(num)
         print('fibonacci({}) => {}'.format(num, result))
+        print('Took {} seconds to benchmark the {}th fibonacci'.format(
+                                                                    time, num
+                                                                    ))
     else:
         print('Usage: {} number'.format(sys.argv[0]))
 
