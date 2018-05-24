@@ -18,6 +18,20 @@ def fibonacci(n):
     # return fibonacci_dynamic(n)
 
 
+# decorator
+def memoized(func):
+    cash = {}
+
+    def new_func(arg):
+        key = arg
+        if key not in cash:
+            cash[key] = func(arg)
+            return cash[key]
+
+    return new_func
+
+
+@memoized
 def fibonacci_recursive(n):
     # Check if n is one of the base cases
     if n == 0 or n == 1:
