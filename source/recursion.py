@@ -14,8 +14,8 @@ def fibonacci(n):
     # Implement fibonacci_recursive, _memoized, and _dynamic below, then
     # change this to call your implementation to verify it passes all tests
     # return fibonacci_recursive(n)
-    return fibonacci_memoized(n)
-    # return fibonacci_dynamic(n)
+    # return fibonacci_memoized(n)
+    return fibonacci_dynamic(n)
 
 
 # decorator
@@ -56,17 +56,32 @@ def fibonacci_memoized(n, memo={}):
             memo[n] = fibonacci_memoized(n-1, memo) + fibonacci_memoized(n-2, memo)
     return memo[n]
 
+
 def fibonacci_dynamic(n):
-    # TODO: Implement the fibonacci function with dynamic programming here
-    pass
+    # Implement the fibonacci function with dynamic programming here
     # Once implemented, change fibonacci (above) to call fibonacci_dynamic
     # to verify that your dynamic implementation passes all test cases
+    fibo_array = [0, 1]
+
+    while len(fibo_array) < n + 1:
+        fibo_array.append(0)
+
+    if n <= 1:
+        return n
+    else:
+        if fibo_array[n-1] == 0:
+            fibo_array[n-1] = fibonacci_dynamic(n-1)
+        if fibo_array[n-2] == 0:
+            fibo_array[n-2] = fibonacci_dynamic(n-2)
+        fibo_array[n] = fibo_array[n-1] + fibo_array[n-2]
+    return fibo_array[n]
 
 def benchmark(num):
     t1 = time.time()
     result = fibonacci(num)
     t2 = time.time()
     return result, t2-t1
+
 
 def main():
     import sys
